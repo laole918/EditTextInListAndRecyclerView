@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EditTextInListView</string>
+    <string name="app_recycler">EditTextInRecyclerView</string>
+</resources>
