@@ -6,10 +6,9 @@ package com.laole918.edittextinlistview.model;
 public class User {
 
     private String name;
-    private String sign;
+    private String phone;
 
     public String getName() {
-
         return name;
     }
 
@@ -17,11 +16,11 @@ public class User {
         this.name = name;
     }
 
-    public String getSign() {
-        return sign;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
