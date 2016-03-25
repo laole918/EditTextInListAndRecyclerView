@@ -1,6 +1,7 @@
 package com.laole918.edittextinlistview.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,12 +24,14 @@ import java.util.List;
  */
 public class ListViewAdapter extends BaseAdapter {
 
+    private Handler handler;
     private Context mContext;
     private List<User> us = new ArrayList<>();
     private int selectPosition = -1;
 
     public ListViewAdapter(Context context) {
         this.mContext = context;
+        handler = new Handler(mContext.getMainLooper());
     }
 
     public void addAll(List<User> us) {
@@ -70,16 +73,17 @@ public class ListViewAdapter extends BaseAdapter {
         }
         final User u = us.get(position);
         String phone = u.getPhone();
+        holder.editText.setCursorVisible(false);
         if(TextUtils.isEmpty(phone)) {
             holder.editText.setText("");
         } else {
             holder.editText.setText(phone);
         }
         if(selectPosition == position) {
-            CharSequence text = holder.editText.getText();
             if(!holder.editText.isFocused()) {
                 holder.editText.requestFocus();
             }
+            CharSequence text = holder.editText.getText();
             holder.editText.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
         } else {
             if(holder.editText.isFocused()) {
@@ -96,7 +100,6 @@ public class ListViewAdapter extends BaseAdapter {
                     }
                     selectPosition = position;
                 } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    holder.editText.onWindowFocusChanged(true);
                 }
                 return false;
             }
@@ -122,6 +125,16 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             }
         };
+        holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    holder.editText.setCursorVisible(true);
+                } else {
+                    holder.editText.setCursorVisible(false);
+                }
+            }
+        });
         holder.editText.addTextChangedListener(watcher);
         holder.editText.setTag(watcher);
         holder.textView.setText(u.getName());
