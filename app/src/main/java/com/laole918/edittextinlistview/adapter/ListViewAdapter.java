@@ -1,6 +1,9 @@
 package com.laole918.edittextinlistview.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<User> us = new ArrayList<>();
+    private int selectPosition = -1;
 
     public ListViewAdapter(Context context) {
         this.mContext = context;
@@ -60,19 +64,66 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void onBindViewHolder(ListViewHolder holder, int position) {
-        User u = us.get(position);
+    public void onBindViewHolder(final ListViewHolder holder, final int position) {
+        if (holder.editText.getTag() instanceof TextWatcher) {
+            holder.editText.removeTextChangedListener((TextWatcher) (holder.editText.getTag()));
+        }
+        final User u = us.get(position);
+        String phone = u.getPhone();
+        if(TextUtils.isEmpty(phone)) {
+            holder.editText.setText("");
+        } else {
+            holder.editText.setText(phone);
+        }
+        if(selectPosition == position) {
+            CharSequence text = holder.editText.getText();
+            if(!holder.editText.isFocused()) {
+                holder.editText.requestFocus();
+            }
+            holder.editText.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
+        } else {
+            if(holder.editText.isFocused()) {
+                holder.editText.clearFocus();
+            }
+        }
         holder.editText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-
-                } else if(event.getAction() == MotionEvent.ACTION_UP) {
-
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(selectPosition != position && !holder.editText.isFocused()) {
+                        holder.editText.requestFocus();
+                        holder.editText.onWindowFocusChanged(true);
+                    }
+                    selectPosition = position;
+                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    holder.editText.onWindowFocusChanged(true);
                 }
                 return false;
             }
         });
+        final TextWatcher watcher = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s)) {
+                    u.setPhone(null);
+                } else {
+                    u.setPhone(String.valueOf(s));
+                }
+            }
+        };
+        holder.editText.addTextChangedListener(watcher);
+        holder.editText.setTag(watcher);
         holder.textView.setText(u.getName());
     }
 
