@@ -1,7 +1,6 @@
 package com.laole918.edittextinlistview.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
