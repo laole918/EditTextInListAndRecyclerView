@@ -137,7 +137,7 @@
         });
     }
 ```
-## 2.最佳解决方案放弃ListView
+## 2.最佳解决方案RecyclerView
 RecyclerView是谷歌V7包下新增的控件，用来替代ListView的使用，在RecyclerView标准化了ViewHolder类似于ListView中convertView用来做视图缓。</br>
 [com.laole918.edittextinlistview.adapter.RecyclerViewAdapter#onBindViewHolder()](https://github.com/laole918/EditTextInListView/blob/master/app%2Fsrc%2Fmain%2Fjava%2Fcom%2Flaole918%2Fedittextinlistview%2Fadapter%2FRecyclerViewAdapter.java#L47)
 ```java
