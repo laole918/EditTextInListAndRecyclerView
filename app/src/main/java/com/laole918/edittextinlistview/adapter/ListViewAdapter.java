@@ -98,7 +98,6 @@ public class ListViewAdapter extends BaseAdapter {
                         holder.editText.requestFocus();
                     }
                     selectPosition = position;
-                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 }
                 return false;
             }
