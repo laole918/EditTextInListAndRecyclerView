@@ -24,14 +24,12 @@ import java.util.List;
  */
 public class ListViewAdapter extends BaseAdapter {
 
-    private Handler handler;
     private Context mContext;
     private List<User> us = new ArrayList<>();
     private int selectPosition = -1;
 
     public ListViewAdapter(Context context) {
         this.mContext = context;
-        handler = new Handler(mContext.getMainLooper());
     }
 
     public void addAll(List<User> us) {
@@ -72,8 +70,8 @@ public class ListViewAdapter extends BaseAdapter {
             holder.editText.removeTextChangedListener((TextWatcher) (holder.editText.getTag()));
         }
         final User u = us.get(position);
+        holder.textView.setText(u.getName());
         String phone = u.getPhone();
-        holder.editText.setCursorVisible(false);
         if(TextUtils.isEmpty(phone)) {
             holder.editText.setText("");
         } else {
@@ -85,10 +83,12 @@ public class ListViewAdapter extends BaseAdapter {
             }
             CharSequence text = holder.editText.getText();
             holder.editText.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
+            holder.editText.setCursorVisible(true);
         } else {
             if(holder.editText.isFocused()) {
                 holder.editText.clearFocus();
             }
+            holder.editText.setCursorVisible(false);
         }
         holder.editText.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -96,7 +96,6 @@ public class ListViewAdapter extends BaseAdapter {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(selectPosition != position && !holder.editText.isFocused()) {
                         holder.editText.requestFocus();
-                        holder.editText.onWindowFocusChanged(true);
                     }
                     selectPosition = position;
                 } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -125,6 +124,8 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             }
         };
+        holder.editText.addTextChangedListener(watcher);
+        holder.editText.setTag(watcher);
         holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -135,9 +136,6 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             }
         });
-        holder.editText.addTextChangedListener(watcher);
-        holder.editText.setTag(watcher);
-        holder.textView.setText(u.getName());
     }
 
     class ListViewHolder {
