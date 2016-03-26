@@ -201,5 +201,5 @@ RecyclerView是谷歌V7包下新增的控件，用来替代ListView的使用，�
 ```
 ## 3.感谢
 [https://github.com/Aspsine/EditTextInListView](https://github.com/Aspsine/EditTextInListView "Aspsine") 整个项目都是参照了大神的项目，发现有光标闪烁问题，就添加了第6步</br>
-[RecyclerView使用详解（一）](http://frank-zhu.github.io/android/2015/01/16/android-recyclerview-part-1/ "Frank-Zhu")
+[RecyclerView使用详解（一）](http://frank-zhu.github.io/android/2015/01/16/android-recyclerview-part-1/ "Frank-Zhu")</br>
 [RecyclerView使用详解（二）](http://frank-zhu.github.io/android/2015/02/25/android-recyclerview-part-2/ "Frank-Zhu")
