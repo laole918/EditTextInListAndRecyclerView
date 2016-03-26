@@ -1,4 +1,4 @@
-# EditText In ListView丢失焦点，无光标，终极解决方案
+# EditText在ListView中无焦点、无光标，终极解决方案
 在ListView中使用EditText作为Item时，EditText无法获取焦点，即使获取焦点光标也不闪烁，而且滚动ListView之后焦点还会消失。
 ## 1.终极解决方案
 * layout_item_view.xml
@@ -23,7 +23,7 @@
         android:inputType="numberDecimal"/>
 </LinearLayout>
 ```
-* [com.laole918.edittextinlistview.adapter.ListViewAdapter#onBindViewHolder()](https://github.com/laole918/EditTextInListView/blob/master/app%2Fsrc%2Fmain%2Fjava%2Fcom%2Flaole918%2Fedittextinlistview%2Fadapter%2FListViewAdapter.java#L68)
+* [com.laole918.edittextinlistview.adapter.ListViewAdapter#onBindViewHolder()](https://github.com/laole918/EditTextInListView/blob/master/app/src/main/java/com/laole918/edittextinlistview/adapter/ListViewAdapter.java#L68)
 
 ```java
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
@@ -139,7 +139,7 @@
 ```
 ## 2.最佳解决方案RecyclerView
 RecyclerView是谷歌V7包下新增的控件，用来替代ListView的使用，在RecyclerView标准化了ViewHolder类似于ListView中convertView用来做视图缓。</br>
-[com.laole918.edittextinlistview.adapter.RecyclerViewAdapter#onBindViewHolder()](https://github.com/laole918/EditTextInListView/blob/master/app%2Fsrc%2Fmain%2Fjava%2Fcom%2Flaole918%2Fedittextinlistview%2Fadapter%2FRecyclerViewAdapter.java#L47)
+[com.laole918.edittextinlistview.adapter.RecyclerViewAdapter#onBindViewHolder()](https://github.com/laole918/EditTextInListView/blob/master/app/src/main/java/com/laole918/edittextinlistview/adapter/RecyclerViewAdapter.java#L47)
 ```java
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
