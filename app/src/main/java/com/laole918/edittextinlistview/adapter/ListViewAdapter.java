@@ -65,10 +65,21 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
+        final User u = us.get(position);
         if (holder.editText.getTag() instanceof TextWatcher) {
             holder.editText.removeTextChangedListener((TextWatcher) (holder.editText.getTag()));
         }
-        final User u = us.get(position);
+        holder.editText.setCursorVisible(false);
+        holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    holder.editText.setCursorVisible(true);
+                } else {
+                    holder.editText.setCursorVisible(false);
+                }
+            }
+        });
         holder.textView.setText(u.getName());
         String phone = u.getPhone();
         if(TextUtils.isEmpty(phone)) {
@@ -82,12 +93,10 @@ public class ListViewAdapter extends BaseAdapter {
             }
             CharSequence text = holder.editText.getText();
             holder.editText.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
-            holder.editText.setCursorVisible(true);
         } else {
             if(holder.editText.isFocused()) {
                 holder.editText.clearFocus();
             }
-            holder.editText.setCursorVisible(false);
         }
         holder.editText.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -124,16 +133,6 @@ public class ListViewAdapter extends BaseAdapter {
         };
         holder.editText.addTextChangedListener(watcher);
         holder.editText.setTag(watcher);
-        holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    holder.editText.setCursorVisible(true);
-                } else {
-                    holder.editText.setCursorVisible(false);
-                }
-            }
-        });
     }
 
     class ListViewHolder {

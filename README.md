@@ -27,22 +27,36 @@
 
 ```java
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
-        // 第1步：移除在第5步添加的TextWatcher，确保在第2步TextWatcher不会触发;
+        final User u = us.get(position);
+        // 第1步：移除在第6步添加的TextWatcher，确保在第2步TextWatcher不会触发;
         // 
         // 提示：当EidtText的内容发生改变时，TextWatcher就会被触发。
         //       
         //       EditText是用ArrayList<TextWatcher>来存储的监听器的,所以必须保证
         //       在这个list里只有一个TextWatcher；
         // 
-        // 为了避免TextWatcher在第2步被调用，提前将他移除。
+        // 为了避免TextWatcher在第3步被调用，提前将他移除。
         // 
         if (holder.editText.getTag() instanceof TextWatcher) {
             holder.editText.removeTextChangedListener((TextWatcher) (holder.editText.getTag()));
         }
-        final User u = us.get(position);
+        // 第2步：设置OnFocusChangeListener当EditText获取焦点后重新设置光标visible为true。
+        //
+        // 确保只有获取到焦点的view的CursorVisible为true。
+        holder.editText.setCursorVisible(false);
+        holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    holder.editText.setCursorVisible(true);
+                } else {
+                    holder.editText.setCursorVisible(false);
+                }
+            }
+        });
         holder.textView.setText(u.getName());
         String phone = u.getPhone();
-        // 第2步：移除TextWatcher之后，设置EditText的Text。
+        // 第3步：移除TextWatcher之后，设置EditText的Text。
         if(TextUtils.isEmpty(phone)) {
             holder.editText.setText("");
         } else {
@@ -70,9 +84,9 @@
             }
             holder.editText.setCursorVisible(false);
         }
-        // 第3步：给EditText设置一个OnTouchListener来更新它的焦点状态，记录到数据源。
+        // 第4步：给EditText设置一个OnTouchListener来更新它的焦点状态，记录到数据源。
         // 
-        // 在第2步中我们了解到必须要从数据源来控制View的状态，所以我们用OnTouchListener来监听
+        // 在第3步中我们了解到必须要从数据源来控制View的状态，所以我们用OnTouchListener来监听
         // ACTION_UP事件，来更新View的状态记录到数据源。
         // 我们并不想在这里消耗触摸事件，所以给onTouch()返回false。
         holder.editText.setOnTouchListener(new View.OnTouchListener() {
@@ -87,7 +101,7 @@
                 return false;
             }
         });
-        // 第4步：给EditText添加一个TextWatcher来监听它的Text变化，更新到数据源
+        // 第5步：给EditText添加一个TextWatcher来监听它的Text变化，更新到数据源
         // 
         // 我们用数据源来控制View的状态。
         // 当用户编辑其中一个EditText之后并且滚动ListView。这个EditText将在不确定的位置被重用。
@@ -116,25 +130,10 @@
             }
         };
         holder.editText.addTextChangedListener(watcher);
-        // 第5步：将TextWatcher设置成EditText的Tag。
+        // 第6步：将TextWatcher设置成EditText的Tag。
         // 这样就能在第4步将它移除。
         // 确保EditText中只有一个TextWatcher产生回调。    
         holder.editText.setTag(watcher);
-        // 第6步：设置OnFocusChangeListener当EditText获取焦点后重新设置光标visible为true。
-        //
-        // 通过以上5步虽然可以解决焦点混乱的问题，但是在EditText的Text内容为空时
-        // 当前获取到焦点的EditText不一定能显示光标。
-        // 确保只有获取到焦点的view的CursorVisible为true。
-        holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    holder.editText.setCursorVisible(true);
-                } else {
-                    holder.editText.setCursorVisible(false);
-                }
-            }
-        });
     }
 ```
 ## 2.最佳解决方案RecyclerView
